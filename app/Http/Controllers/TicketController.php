@@ -49,7 +49,7 @@ if ($ticketActifExiste) {
             'client_id' => Auth::id(),
         ]);
 
-        return redirect()->route('tickets.show', $ticket->id);
+       return redirect()->route('tickets.show', ['ticket' => $ticket->getKey()]);
     }
     // Affiche le ticket créé (position, temps estimé...)
     public function show(Ticket $ticket)
@@ -73,5 +73,18 @@ if (
 
         return view('tickets.show', compact('ticket'));
     }
+public function suivre(Request $request)
+{
+    $request->validate([
+        'numero' => 'required|string',
+    ]);
 
+    $ticket = Ticket::where('numero', $request->numero)->first();
+
+    if (!$ticket) {
+        return back()->with('error', 'Aucun ticket trouvé avec ce numéro.');
+    }
+
+   return redirect ('/tickets/' . $ticket->id);
+}
 }

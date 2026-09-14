@@ -25,6 +25,11 @@ Route::post('/deconnexion', [AuthController::class, 'logout'])
     ->name('logout');
     Route::post('/paiements/webhook', [PaiementController::class, 'webhook'])
     ->name('paiements.webhook');
+     Route::get('/tickets/suivre', function () {
+    return view('tickets.suivre');
+})->name('tickets.suivre');
+Route::post('/tickets/suivre', [TicketController::class, 'suivre'])
+    ->name('tickets.suivre.rechercher');
 
 Route::middleware('auth')->group(function () {
 
@@ -48,9 +53,11 @@ Route::middleware('auth')->group(function () {
 Route::post('/tickets', [TicketController::class, 'store'])
     ->middleware('role:client')
     ->name('tickets.store');
+    
+
     Route::get('/tickets/{ticket}', [TicketController::class, 'show'])->name('tickets.show');
     Route::get('/tickets/{ticket}/position', [FileController::class, 'position'])->name('tickets.position');
-
+   
     // ---- Routes EMPLOYÉ (rôle "employe" requis) ----
     Route::middleware('role:employe')->group(function () {
         Route::get('/employe/tableau', [EmployeController::class, 'tableauDeBord'])->name('employe.tableau');
