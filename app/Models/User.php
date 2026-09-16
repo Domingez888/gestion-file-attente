@@ -8,12 +8,13 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['nom', 'email', 'motDePasse', 'telephone', 'role', 'secteur', 'adresse'])]
+#[Fillable(['nom', 'email', 'motDePasse', 'telephone', 'role', 'secteur', 'adresse','etablissement_id'])]
 #[Hidden(['motDePasse', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -37,6 +38,11 @@ class User extends Authenticatable
     public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class, 'client_id');
+    }
+    // En tant qu'Employé : l'établissement auquel il appartient
+    public function etablissement(): BelongsTo
+    {
+    return $this->belongsTo(Etablissement::class, 'etablissement_id');
     }
 
     // En tant qu'Employé : les services qu'il possède

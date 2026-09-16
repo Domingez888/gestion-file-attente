@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\EmployeController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ServiceController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaiementController;
@@ -70,4 +71,33 @@ Route::post('/tickets', [TicketController::class, 'store'])
         Route::post('/services', [ServiceController::class, 'store'])->name('services.store');
         Route::delete('/services/{service}', [ServiceController::class, 'destroy'])->name('services.destroy');
     });
+
+Route::middleware('role:admin')->group(function () {
+    Route::get('/admin/tableau', [AdminController::class, 'tableauDeBord'])
+        ->name('admin.tableau');
+        Route::get('/admin/etablissements', [AdminController::class, 'etablissements'])
+    ->name('admin.etablissements.index');
+    Route::get('/admin/etablissements/creer', [AdminController::class, 'creerEtablissement'])
+    ->name('admin.etablissements.creer');
+    Route::post('/admin/etablissements', [AdminController::class, 'enregistrerEtablissement'])
+    ->name('admin.etablissements.store');
+    Route::get('/admin/employes', [AdminController::class, 'employes'])
+    ->name('admin.employes.index');
+    Route::get('/admin/employes/creer', [AdminController::class, 'creerEmploye'])
+    ->name('admin.employes.creer');
+    Route::post('/admin/employes', [AdminController::class, 'enregistrerEmploye'])
+    ->name('admin.employes.store');
+    Route::get('/admin/employes/{employe}/modifier', [AdminController::class, 'modifierEmploye'])
+    ->name('admin.employes.modifier');
+    Route::put('/admin/employes/{employe}', [AdminController::class, 'mettreAJourEmploye'])
+    ->name('admin.employes.update');
+    Route::get('/admin/etablissements/{etablissement}/modifier', [AdminController::class, 'modifierEtablissement'])
+    ->name('admin.etablissements.modifier');
+    Route::put('/admin/etablissements/{etablissement}', [AdminController::class, 'mettreAJourEtablissement'])
+    ->name('admin.etablissements.update');
+    Route::delete('/admin/etablissements/{etablissement}', [AdminController::class, 'supprimerEtablissement'])
+    ->name('admin.etablissements.destroy');
+    Route::delete('/admin/employes/{employe}', [AdminController::class, 'supprimerEmploye'])
+    ->name('admin.employes.destroy');
+});
 });

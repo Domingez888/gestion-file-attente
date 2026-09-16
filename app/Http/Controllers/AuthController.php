@@ -16,7 +16,7 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-    // Traite l'inscription
+    
     public function register(Request $request)
     {
         $donnees = $request->validate([
@@ -39,13 +39,12 @@ class AuthController extends Controller
         return redirect('/');
     }
 
-    // Affiche le formulaire de connexion
+
     public function showLogin()
     {
         return view('auth.login');
     }
 
-    // Traite la connexion
     public function login(Request $request)
     {
         $donnees = $request->validate([
@@ -55,11 +54,14 @@ class AuthController extends Controller
 
         if (Auth::attempt(['email' => $donnees['email'], 'password' => $donnees['motDePasse']])) {
             $request->session()->regenerate();
+            if (Auth::user()->role === 'admin') {
+    return redirect('/admin/tableau');
+}
             if (Auth::user()->role === 'employe') {
     return redirect('/employe/tableau');
 }
 
-return redirect('/tickets/creer');
+    return redirect('/tickets/creer');
         }
 
         throw ValidationException::withMessages([
@@ -67,7 +69,6 @@ return redirect('/tickets/creer');
         ]);
     }
 
-    // Déconnexion
     public function logout(Request $request)
     {
         Auth::logout();
