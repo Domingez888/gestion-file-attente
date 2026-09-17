@@ -66,10 +66,6 @@ Route::post('/tickets', [TicketController::class, 'store'])
         Route::post('/employe/tickets/{ticket}/absent', [EmployeController::class, 'marquerAbsent'])->name('employe.marquerAbsent');
         Route::post('/employe/tickets/{ticket}/traite', [EmployeController::class, 'marquerTraite'])->name('employe.marquerTraite');
 
-        Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
-        Route::get('/services/creer', [ServiceController::class, 'create'])->name('services.create');
-        Route::post('/services', [ServiceController::class, 'store'])->name('services.store');
-        Route::delete('/services/{service}', [ServiceController::class, 'destroy'])->name('services.destroy');
     });
 
 Route::middleware('role:admin')->group(function () {
