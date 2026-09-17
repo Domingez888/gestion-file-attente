@@ -15,10 +15,12 @@ public function tableauDeBord()
 {
   $nombreEtablissements = Etablissement::count();
   $nombreEmployes = User::where('role','employe')->count();
+  $nombreServices = Service::count();
   return view('admin.tableau',
   compact(
     'nombreEtablissements',
-    'nombreEmployes'
+    'nombreEmployes',
+    'nombreServices',
   ));  
 }
 public function etablissements()

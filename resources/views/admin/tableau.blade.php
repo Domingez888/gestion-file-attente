@@ -74,6 +74,20 @@
             </a>
 
         </div>
+        <a href="{{ route('admin.services.index') }}"
+   class="block bg-white rounded-xl shadow p-6 hover:shadow-lg transition">
+
+    <h3 class="text-xl font-semibold mb-3">
+        Services
+    </h3>
+    <p class="text-4xl font-bold text-blue-600">
+    {{ $nombreServices }}
+</p>
+
+    <p class="text-gray-500 mt-2">
+        Gérer les services des établissements
+    </p>
+</a>
 
     </main>
 
