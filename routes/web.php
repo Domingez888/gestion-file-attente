@@ -99,5 +99,13 @@ Route::middleware('role:admin')->group(function () {
     ->name('admin.etablissements.destroy');
     Route::delete('/admin/employes/{employe}', [AdminController::class, 'supprimerEmploye'])
     ->name('admin.employes.destroy');
+    Route::get('/admin/services', [AdminController::class, 'services'])
+    ->name('admin.services.index');
+
+Route::get('/admin/services/creer', [AdminController::class, 'creerService'])
+    ->name('admin.services.creer');
+
+Route::post('/admin/services', [AdminController::class, 'enregistrerService'])
+    ->name('admin.services.store');
 });
 });

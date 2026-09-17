@@ -34,13 +34,33 @@
 
             <form method="POST" action="{{ route('paiements.rediriger') }}">
                 @csrf
+<div class="mb-4">
+    <label class="form-label">Choisir un établissement</label>
 
+    <select name="etablissement_id"
+            id="etablissement_id"
+            class="form-select"
+            required>
+
+        <option value="">-- Sélectionner --</option>
+
+        @foreach ($etablissements as $etablissement)
+            <option value="{{ $etablissement->id }}">
+                {{ $etablissement->nom }}
+            </option>
+        @endforeach
+
+    </select>
+</div>
                 <div class="mb-4">
                     <label class="form-label">Choisir un service</label>
                     <select name="service_id" class="form-select" required>
                         <option value="">-- Sélectionner --</option>
                         @foreach ($services as $service)
-                            <option value="{{ $service->id }}">{{ $service->nom }}</option>
+                            <option value="{{ $service->id }}"
+        data-etablissement="{{ $service->etablissement_id }}">
+    {{ $service->nom }}
+</option>
                         @endforeach
                     </select>
                 </div>
@@ -49,5 +69,30 @@
             </form>
         </div>
     </div>
+    <script>
+    const etablissementSelect = document.getElementById('etablissement_id');
+    const serviceSelect = document.querySelector('select[name="service_id"]');
+
+    function filtrerServices() {
+        const etablissementId = etablissementSelect.value;
+
+        serviceSelect.value = '';
+
+        Array.from(serviceSelect.options).forEach((option, index) => {
+            if (index === 0) {
+                option.hidden = false;
+                return;
+            }
+
+            option.hidden =
+                !etablissementId ||
+                option.dataset.etablissement !== etablissementId;
+        });
+    }
+
+    etablissementSelect.addEventListener('change', filtrerServices);
+
+    filtrerServices();
+</script>
 </body>
 </html>

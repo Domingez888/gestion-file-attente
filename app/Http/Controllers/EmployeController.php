@@ -9,22 +9,23 @@ use Illuminate\Support\Facades\Auth;
 
 class EmployeController extends Controller
 {
-    // Affiche la liste des files gérées par l'employé (ou toutes, pour simplifier)
-    public function tableauDeBord()
-    {
-        $files = File::with(['tickets', 'service'])
-    ->whereHas('service', function ($query) {
-    $query->where('employe_id', Auth::id());
-})->get();
-        return view('employe.tableau', compact('files'));
-    }
+   public function tableauDeBord()
+{
+    $employe = Auth::user();
 
-    // Appelle le prochain ticket en attente dans une file donnée
+    $files = File::with(['tickets', 'service'])
+        ->where('service_id', $employe->service_id)
+        ->get();
+
+    return view('employe.tableau', compact('files'));
+}
+
     public function appelerSuivant(File $file)
     {
-        if (!$file->service || $file->service->employe_id !== Auth::id()) {
+        if (!$file->service || $file->service_id !== Auth::user()->service_id) {
     abort(403, 'Cette file ne vous appartient pas.');
 }
+
         $prochainTicket = $file->tickets()
             ->where('statut', 'en attente')
             ->orderBy('heureCreation')
@@ -49,10 +50,13 @@ if ($ticketDejaAppelee) {
         return back()->with('succes', 'Ticket ' . $prochainTicket->numero . ' appelé.');
     }
 
-    // Marque un ticket comme "absent" (client ne s'est pas présenté)
     public function marquerAbsent(Ticket $ticket)
     {
-        if (!$ticket->file || !$ticket->file->service || $ticket->file->service->employe_id !== Auth::id()) {
+        if (
+    !$ticket->file ||
+    !$ticket->file->service ||
+    $ticket->file->service_id !== Auth::user()->service_id
+) {
     abort(403, 'Ce ticket ne vous appartient pas.');
 }
 if ($ticket->statut !== 'appele') {
@@ -62,10 +66,13 @@ if ($ticket->statut !== 'appele') {
         return back()->with('info', 'Ticket ' . $ticket->numero . ' marqué absent.');
     }
 
-    // Marque un ticket comme "traité" (client pris en charge avec succès)
     public function marquerTraite(Ticket $ticket)
     {
-        if (!$ticket->file || !$ticket->file->service || $ticket->file->service->employe_id !== Auth::id()) {
+       if (
+    !$ticket->file ||
+    !$ticket->file->service ||
+    $ticket->file->service_id !== Auth::user()->service_id
+) {
     abort(403, 'Ce ticket ne vous appartient pas.');
 }
 if ($ticket->statut !== 'appele') {

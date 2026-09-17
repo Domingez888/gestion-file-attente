@@ -109,6 +109,28 @@
                     @endforeach
 
                 </select>
+                <div class="mt-4">
+    <label for="service_id" class="block mb-2 font-medium">
+        Service
+    </label>
+
+    <select name="service_id"
+            id="service_id"
+            required
+            class="w-full border rounded-lg px-4 py-3">
+
+        <option value="">-- Choisir un service --</option>
+
+        @foreach ($services as $service)
+            <option value="{{ $service->id }}"
+                    data-etablissement="{{ $service->etablissement_id }}"
+                    @selected(old('service_id', $employe->service_id) == $service->id)>
+                {{ $service->nom }}
+            </option>
+        @endforeach
+
+    </select>
+</div>
             </div>
 
             <div class="flex gap-3">
@@ -130,6 +152,36 @@
     </div>
 
 </main>
+<script>
+    const etablissementSelect = document.querySelector('select[name="etablissement_id"]');
+    const serviceSelect = document.getElementById('service_id');
+
+    function filtrerServices() {
+        const etablissementId = etablissementSelect.value;
+
+        Array.from(serviceSelect.options).forEach((option, index) => {
+            if (index === 0) {
+                option.hidden = false;
+                return;
+            }
+
+            option.hidden =
+                option.dataset.etablissement !== etablissementId;
+        });
+
+        const selectedOption = serviceSelect.options[serviceSelect.selectedIndex];
+
+        if (selectedOption &&
+            selectedOption.value &&
+            selectedOption.dataset.etablissement !== etablissementId) {
+            serviceSelect.value = '';
+        }
+    }
+
+    etablissementSelect.addEventListener('change', filtrerServices);
+
+    filtrerServices();
+</script>
 
 </body>
 </html>

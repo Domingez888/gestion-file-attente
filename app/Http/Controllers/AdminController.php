@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Etablissement;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Service;
+use App\Models\File;
 
 class AdminController extends Controller
 {
@@ -44,6 +46,42 @@ public function enregistrerEtablissement(Request $request)
         ->route('admin.etablissements.index')
         ->with('success', 'Établissement ajouté avec succès.');
 }
+public function creerService()
+{
+    $etablissements = Etablissement::orderBy('nom')->get();
+
+    return view('admin.services.creer', compact('etablissements'));
+}
+public function enregistrerService(Request $request)
+{
+    $donnees = $request->validate([
+        'nom' => 'required|string|max:255',
+        'secteur' => 'nullable|string|max:255',
+        'adresse' => 'nullable|string|max:255',
+        'prix' => 'required|numeric|min:0',
+        'etablissement_id' => 'required|exists:etablissements,id',
+    ]);
+
+    $service = Service::create($donnees);
+
+File::create([
+    'nom' => 'File ' . $service->nom,
+    'statut' => 'ouverte',
+    'service_id' => $service->id,
+]);
+
+    return redirect()
+        ->route('admin.services.index')
+        ->with('success', 'Service ajouté avec succès.');
+}
+public function services()
+{
+    $services = Service::with('etablissement')
+        ->orderBy('nom')
+        ->get();
+
+    return view('admin.services.index', compact('services'));
+}
 public function employes()
 {
     $employes = User::where('role', 'employe')
@@ -56,18 +94,24 @@ public function creerEmploye()
 {
     $etablissements = Etablissement::orderBy('nom')->get();
 
-    return view('admin.employes.creer', compact('etablissements'));
+    $services = Service::with('etablissement')
+        ->orderBy('nom')
+        ->get();
+
+    return view(
+        'admin.employes.creer',
+        compact('etablissements', 'services')
+    );
 }
 public function enregistrerEmploye(Request $request)
-{
-    $donnees = $request->validate([
-        'nom' => 'required|string|max:255',
-        'email' => 'required|email|max:255|unique:users,email',
-        'telephone' => 'nullable|string|max:20',
-        'motDePasse' => 'required|string|min:8',
-        'etablissement_id' => 'required|exists:etablissements,id',
-    ]);
-
+{$donnees = $request->validate([
+    'nom' => 'required|string|max:255',
+    'email' => 'required|email|max:255|unique:users,email',
+    'telephone' => 'nullable|string|max:20',
+    'motDePasse' => 'required|string|min:8',
+    'etablissement_id' => 'required|exists:etablissements,id',
+    'service_id' => 'required|exists:services,id',
+]);
     User::create([
         'nom' => $donnees['nom'],
         'email' => $donnees['email'],
@@ -75,8 +119,9 @@ public function enregistrerEmploye(Request $request)
         'motDePasse' => Hash::make($donnees['motDePasse']),
         'role' => 'employe',
         'etablissement_id' => $donnees['etablissement_id'],
-    ]);
-
+        'service_id' => $donnees['service_id'],
+   
+ ]);
     return redirect()
         ->route('admin.employes.index')
         ->with('success', 'Employé ajouté avec succès.');
@@ -87,9 +132,14 @@ public function modifierEmploye(User $employe)
 
     $etablissements = Etablissement::orderBy('nom')->get();
 
+    $services = Service::with('etablissement')
+        ->orderBy('nom')
+        ->get();
+
     return view('admin.employes.modifier', compact(
         'employe',
-        'etablissements'
+        'etablissements',
+        'services'
     ));
 }
 public function mettreAJourEmploye(Request $request, User $employe)
@@ -101,6 +151,7 @@ public function mettreAJourEmploye(Request $request, User $employe)
         'email' => 'required|email|max:255|unique:users,email,' . $employe->id,
         'telephone' => 'nullable|string|max:20',
         'etablissement_id' => 'required|exists:etablissements,id',
+        'service_id' => 'required|exists:services,id',
     ]);
 
     $employe->update([
@@ -108,6 +159,7 @@ public function mettreAJourEmploye(Request $request, User $employe)
         'email' => $donnees['email'],
         'telephone' => $donnees['telephone'] ?? null,
         'etablissement_id' => $donnees['etablissement_id'],
+        'service_id' => $donnees['service_id'],
     ]);
 
     return redirect()

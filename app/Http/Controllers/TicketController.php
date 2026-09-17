@@ -7,24 +7,26 @@ use App\Models\Service;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Etablissement;
 
 class TicketController extends Controller
 {
-    // Affiche le formulaire de prise de ticket
-    public function create()
-    {
-        $services = Service::all();
-        return view('tickets.create', compact('services'));
-    }
+   public function create()
+{
+    $etablissements = Etablissement::orderBy('nom')->get();
 
-    // Traite la prise de ticket
+    $services = Service::whereNotNull('etablissement_id')
+        ->orderBy('nom')
+        ->get();
+
+    return view('tickets.create', compact('etablissements', 'services'));
+}
     public function store(Request $request)
     {
         $donnees = $request->validate([
             'service_id' => 'required|exists:services,id',
         ]);
 
-        // On récupère (ou on crée) une file pour ce service
        $file = File::firstOrCreate(
     ['service_id' => $donnees['service_id']],
     [

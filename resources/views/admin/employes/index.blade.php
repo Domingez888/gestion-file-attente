@@ -68,6 +68,7 @@
                         <th class="text-left p-4">Email</th>
                         <th class="text-left p-4">Téléphone</th>
                         <th class="text-left p-4">Établissement</th>
+                        <th class="text-left">Service</th>
                         <th class="text-left p-4">Actions</th>
                     </tr>
                 </thead>
@@ -93,6 +94,9 @@
                             <td class="p-4">
                                 {{ $employe->etablissement?->nom ?? 'Non affecté' }}
                             </td>
+                            <td class="p-4">
+    {{ $employe->service?->nom ?? 'Non affecté' }}
+</td>
 
                          <td class="p-4">
     <div class="flex items-center gap-4">

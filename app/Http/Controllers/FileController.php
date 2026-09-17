@@ -14,16 +14,15 @@ class FileController extends Controller
     if (Auth::user()->role === 'client' && $ticket->client_id !== Auth::id()) {
     abort(403, 'Ce ticket ne vous appartient pas.');
 }
-
 if (
     Auth::user()->role === 'employe' &&
     (
         !$ticket->file ||
         !$ticket->file->service ||
-        $ticket->file->service->employe_id !== Auth::id()
+        $ticket->file->service_id !== Auth::user()->service_id
     )
 ) {
-    abort(403, 'Ce ticket ne fait pas partie de vos services.');
+    abort(403, 'Ce ticket ne fait pas partie de votre service.');
 }
 
        

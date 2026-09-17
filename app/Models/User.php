@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['nom', 'email', 'motDePasse', 'telephone', 'role', 'secteur', 'adresse','etablissement_id'])]
+#[Fillable(['nom', 'email', 'motDePasse', 'telephone', 'role', 'secteur', 'adresse','etablissement_id','service_id',])]
 #[Hidden(['motDePasse', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -68,4 +68,8 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Notification::class, 'notification_user');
     }
+    public function service(): BelongsTo
+{
+    return $this->belongsTo(Service::class, 'service_id');
+}
 }

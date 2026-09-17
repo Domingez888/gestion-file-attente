@@ -17,4 +17,8 @@ public function employes(): HasMany
 {
     return $this->hasMany(User::class, 'etablissement_id');
 }
+public function services(): HasMany
+{
+    return $this->hasMany(Service::class, 'etablissement_id');
+}
 }
