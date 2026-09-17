@@ -46,17 +46,7 @@
 
     </div>
 
-    <script>
-        document.getElementById('suiviTicketForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            const ticket = document.getElementById('ticket').value;
-
-            if (ticket) {
-                window.location.href = '/tickets/' + ticket;
-            }
-        });
-    </script>
+   
 
 </body>
 </html>
