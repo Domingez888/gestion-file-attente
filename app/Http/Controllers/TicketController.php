@@ -67,7 +67,7 @@ if (
     (
         !$ticket->file ||
         !$ticket->file->service ||
-        $ticket->file->service->employe_id !== Auth::id()
+        $ticket->file->service->_id !== Auth::user()->service_id
     )
 ) {
     abort(403, 'Ce ticket ne fait pas partie de vos services.');

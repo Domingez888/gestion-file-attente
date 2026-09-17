@@ -7,13 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['nom', 'secteur', 'adresse', 'employe_id', 'prix','etablissement_id'])]
+#[Fillable(['nom', 'secteur', 'adresse','prix','etablissement_id'])]
 class Service extends Model
 {
-    public function employe(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'employe_id');
-    }
+    
 
     public function paiements(): HasMany
     {

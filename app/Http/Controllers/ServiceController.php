@@ -8,20 +8,17 @@ use Illuminate\Support\Facades\Auth;
 
 class ServiceController extends Controller
 {
-    // Liste des services de l'employé connecté
     public function index()
     {
-        $services = Service::where('employe_id', Auth::id())->get();
+        $services = Service::where('id', Auth::user()->service_id)->get();
         return view('services.index', compact('services'));
     }
 
-    // Formulaire d'ajout d'un service
     public function create()
     {
         return view('services.create');
     }
 
-    // Traite l'ajout d'un service
     public function store(Request $request)
     {
         $donnees = $request->validate([
@@ -35,18 +32,16 @@ class ServiceController extends Controller
             'nom' => $donnees['nom'],
             'secteur' => $donnees['secteur'],
             'adresse' => $donnees['adresse'],
-            'employe_id' => Auth::id(),
             'prix' => $donnees['prix'],
         ]);
 
         return redirect()->route('services.index')->with('succes', 'Service ajouté avec succès.');
     }
 
-       // Supprime un service (uniquement si l'employé connecté en est le propriétaire)
     public function destroy(Service $service)
     {
-        // Sécurité : seul le propriétaire du service peut le supprimer
-        if ($service->employe_id !== Auth::id()) {
+    
+        if ($service->id !== Auth::user()->service_id) {
             abort(403, 'Ce service ne vous appartient pas.');
         }
 
