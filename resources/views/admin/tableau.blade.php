@@ -37,29 +37,14 @@
             Tableau de bord
         </h2>
 
-        <p class="text-gray-600 mb-8">
-            Gérez les établissements et les employés de FileFlow.
+                <p class="text-gray-600 mb-8">
+            Gérez les services et les employés de FileFlow.
         </p>
 
-        <a href="{{ route('admin.etablissements.index') }}"
-   class="block bg-white rounded-xl shadow p-6 hover:shadow-lg transition">
-
-            <div class="bg-white rounded-xl shadow p-6">
-                <h3 class="text-xl font-semibold mb-3">
-                    Établissements
-                </h3>
-
-                <p class="text-4xl font-bold text-blue-600">
-                    {{ $nombreEtablissements }}
-                </p>
-
-                <p class="text-gray-500 mt-2">
-                    établissements enregistrés
-                </p>
-            </a>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 
             <a href="{{ route('admin.employes.index') }}"
-   class="block bg-white rounded-xl shadow p-6 hover:shadow-lg transition">
+               class="block bg-white rounded-xl shadow p-6 hover:shadow-lg transition">
                 <h3 class="text-xl font-semibold mb-3">
                     Employés
                 </h3>
@@ -73,21 +58,29 @@
                 </p>
             </a>
 
+            <a href="{{ route('admin.services.index') }}"
+               class="block bg-white rounded-xl shadow p-6 hover:shadow-lg transition">
+                <h3 class="text-xl font-semibold mb-3">
+                    Services
+                </h3>
+                <p class="text-4xl font-bold text-blue-600">
+                    {{ $nombreServices }}
+                </p>
+
+                <p class="text-gray-500 mt-2">
+                    Gérer les services des établissements
+                </p>
+            </a>
+
         </div>
-        <a href="{{ route('admin.services.index') }}"
-   class="block bg-white rounded-xl shadow p-6 hover:shadow-lg transition">
 
-    <h3 class="text-xl font-semibold mb-3">
-        Services
-    </h3>
-    <p class="text-4xl font-bold text-blue-600">
-    {{ $nombreServices }}
-</p>
-
-    <p class="text-gray-500 mt-2">
-        Gérer les services des établissements
-    </p>
-</a>
+        <div class="card-ticket">
+            <h3>Abonnement</h3>
+            <p class="text-muted">Statut : Actif</p>
+            <a href="{{ route('admin.abonnement.renouveler') }}" class="btn-indigo">
+                Renouveler
+            </a>
+        </div>
 
     </main>
 

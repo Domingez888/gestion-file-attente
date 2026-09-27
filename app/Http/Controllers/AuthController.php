@@ -54,6 +54,10 @@ class AuthController extends Controller
 
         if (Auth::attempt(['email' => $donnees['email'], 'password' => $donnees['motDePasse']])) {
             $request->session()->regenerate();
+            if (Auth::user()->role === 'super_admin') {
+   return redirect()->route('super-admin.tableau-de-bord');
+
+}
             if (Auth::user()->role === 'admin') {
     return redirect('/admin/tableau');
 }

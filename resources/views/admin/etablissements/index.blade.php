@@ -37,23 +37,24 @@
     </div>
 @endif
 
-        <div class="flex justify-between items-center mb-6">
-            <div>
-                <h2 class="text-3xl font-bold">
-                    Gestion des établissements
-                </h2>
+        <div class="mb-6">
+    <h2 class="text-3xl font-bold">
+        Gestion des établissements
+    </h2>
 
-                <p class="text-gray-600 mt-1">
-                    Liste des établissements enregistrés dans FileFlow.
-                </p>
-            </div>
-<a href="{{ route('admin.etablissements.creer') }}"
-   class="bg-orange-500 text-white px-5 py-3 rounded-lg">
-    + Ajouter un établissement
-</a>
+    <p class="text-gray-600 mt-1">
+        Liste des établissements enregistrés dans FileFlow.
+    </p>
+</div>
 
-        <div class="bg-white rounded-xl shadow overflow-hidden">
+<div class="mb-6">
+    <a href="{{ route('admin.etablissements.creer') }}"
+       class="bg-orange-500 text-white px-5 py-3 rounded-lg inline-block">
+        + Ajouter un établissement
+    </a>
+</div>
 
+<div class="bg-white rounded-xl shadow overflow-hidden">
             <table class="w-full">
                 <thead class="bg-gray-50">
                     <tr>

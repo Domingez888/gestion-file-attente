@@ -42,4 +42,9 @@ return [
     'token_url' => env('FLUTTERWAVE_TOKEN_URL'),
     'webhook_secret' => env('FLUTTERWAVE_WEBHOOK_SECRET'),
 ],
+'fileflow' => [
+    'abonnement_annuel' => (int) env('FILEFLOW_ABONNEMENT_ANNUEL', 100000),
+    'devise' => env('FILEFLOW_DEVISE', 'XAF'),
+    'duree_abonnement' => (int) env('FILEFLOW_DUREE_ABONNEMENT', 12),
+],
 ];

@@ -21,6 +21,7 @@ class Paiement extends Model
     'devise',
     'charge_id',
     'client_id',
+    'abonnement_id',
 ];
     public function service(): BelongsTo
     {
